@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-contact">
+<form method="post" enctype="multipart/form-data">
+    <h1>Редактирование профиля</h1>
+    {% csrf_token %}
+
+    {% if user.photo %}
+        <p><img src="{{ user.photo.url }}"></p>
+    {% else %}
+        <p><img src="{{ default_image }}"></p>
+    {% endif %}
+
+    <div class="form-error">{{ form.non_field_errors }}</div>
+    {% for f in form %}
+        <div class="form-group">
+            <label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}
+        </div>
+        <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+
+    <p><button type="submit">Сохранить</button></p>
+
+    <div class="form-links">
+        <a href="{% url 'users:profile_detail' %}" class="forgot-password-link">Отмена</a>
+    </div>
+</form>
+
+{% endblock %}
+</div>

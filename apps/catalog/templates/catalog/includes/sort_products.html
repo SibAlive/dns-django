@@ -1,0 +1,53 @@
+<div class="sort-controls">
+    <span class="sort-label">Сортировать по:</span>
+
+    <div class="sort-buttons">
+        <!-- Сортировка по имени -->
+        <div class="sort-group">
+            <a href="?sort=name&direction=asc"
+               class="sort-btn {% if current_sort == 'name' and current_direction == 'asc' %}active{% endif %}"
+               title="По имени (А-Я)">
+                Имя ↑
+            </a>
+            <a href="?sort=name&direction=desc"
+               class="sort-btn {% if current_sort == 'name' and current_direction == 'desc' %}active{% endif %}"
+               title="По имени (Я-А)">
+                Имя ↓
+            </a>
+        </div>
+
+        <!-- Сортировка по цене -->
+        <div class="sort-group">
+            <a href="?sort=price&direction=asc"
+               class="sort-btn {% if current_sort == 'price' and current_direction == 'asc' %}active{% endif %}"
+               title="Сначала дешевые">
+                Цена ↑
+            </a>
+            <a href="?sort=price&direction=desc"
+               class="sort-btn {% if current_sort == 'price' and current_direction == 'desc' %}active{% endif %}"
+               title="Сначала дорогие">
+                Цена ↓
+            </a>
+        </div>
+
+        <!-- Сортировка по новизне -->
+        <a href="?sort=created_at&direction=desc"
+           class="sort-btn {% if current_sort == 'created_at' %}active{% endif %}"
+           title="Сначала новые">
+            Новинки
+        </a>
+    </div>
+</div>
+
+<!-- Информация о текущей сортировке -->
+<div class="sort-info">
+    {% if current_sort == 'name' %}
+        Товары отсортированы по имени
+        {% if current_direction == 'asc' %}(А-Я){% else %}(Я-А){% endif %}
+    {% elif current_sort == 'price' %}
+        Товары отсортированы по цене
+        {% if current_direction == 'asc' %}(сначала дешевые){% else %}(сначала дорогие){% endif %}
+    {% elif current_sort == 'created_at' %}
+        Товары отсортированы по новизне (сначала новые)
+    {% endif %}
+</div>

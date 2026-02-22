@@ -1,0 +1,46 @@
+<header>
+    <div class="header-container">
+      <!-- Левая часть -->
+      <div class="header-left">
+        <a href="/" class="logo">DNS</a>
+        
+          <nav class="nav-links">
+          <form action="#" method="get">
+              <input type="text" name="q" placeholder="Поиск...">
+              <button type="submit">Найти</button>
+          </form>
+        </nav>
+      </div>
+
+      <!-- Правая часть -->
+      <div class="header-right">
+        <a href="{% url 'catalog:categories' %}" class="icon-btn" title="Каталог">
+          <span class="icon-catalog"></span>
+          <span class="icon-text"> Каталог</span>
+        </a>
+
+        <a href="{% url 'wishlist:detail' %}" class="icon-btn" title="Избранное">
+          <span class="icon-favorites"></span>
+          <span class="icon-text">Избранное</span>
+        </a>
+
+        <a href="{% url 'cart:detail' %}" class="icon-btn" title="Корзина">
+          <span class="icon-cart"></span>
+          <span class="icon-text">Корзина</span>
+          {% if cart_len %}
+            <span class="badge">{{ cart_len }}</span>
+          {% endif %}
+        </a>
+
+        <a href="#" class="icon-btn" title="Заказы">
+          <span class="icon-cart"></span>
+          <span class="icon-text">Заказы</span>
+        </a>
+
+        <a href="{% url 'users:profile_detail' %}" class="icon-btn" title="Войти">
+          <span class="icon-notification"></span>
+          <span class="icon-text">Личный кабинет</span>
+        </a>
+      </div>
+    </div>
+  </header>

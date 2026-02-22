@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load price_filters %}
+{% load static %}
+
+{% block content %}
+
+<div class="catalog-container">
+
+    {% include "catalog/includes/breadcrumbs.html" %}
+
+    <h1 class="catalog-title">{{ title }}</h1>
+
+    {% include "catalog/includes/sort_products.html" %}
+
+    <div class="products-grid">
+      {% for product in products %}
+        <div class="products-card">
+            <a href="{{ product.get_absolute_url }}" class="no-underline">
+              <div class="products-header">
+                  {% if product.main_image %}
+                    <img src="{{ product.main_image.url }}" class="products-main-img">
+                  {% else %}
+                    <img src="{{ default_image }}"
+                        class="gallery-main-img"
+                        alt="Нет изображения">
+                  {% endif %}
+              </div>
+
+              <div class="products-title">
+                {{ product.name }}
+              </div>
+            </a>
+
+              <div class="products-purchase-row">
+                <div class="product-price-row">
+                    {% with old_price=product.get_old_price %}
+                        {% if old_price %}
+                            <span class="price-current">{{ product.price | format_price }} ₽</span>
+                            <span class="price-old">{{ old_price | format_price }} ₽</span>
+                        {% else %}
+                            <span class="price-current">{{ product.price | format_price }} ₽</span>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+
+                <button class="fav-btn favorite-toggle-btn {% if product.id in wishlist_products %} is-fav {% endif %}"
+                    data-product-id="{{ product.id }}"
+                    data-url="{% url 'wishlist:add' product.id %}">
+                    &#10084;
+                </button>
+
+                  <form method="post" action="{% url 'cart:add' product_id=product.pk %}">
+                    {% csrf_token %}
+                    <button type="submit" class="products-cart"></button>
+                  </form>
+              </div>
+          <div class="products-stores">
+              {% if product.stock_quantity %}
+                В наличии
+              {% else %}
+                Нет в наличии
+              {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+</div>
+
+    {% include "catalog/includes/pagination_products.html" %}
+
+<script src="{% static 'catalog/js/wishlist.js' %}"></script>
+
+{% endblock %}

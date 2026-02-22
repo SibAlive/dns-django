@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="catalog-container">
+    {% include "catalog/includes/breadcrumbs.html" %}
+
+    <h1 class="catalog-title">{{ title }}</h1>
+
+    <div class="categories-grid">
+      <!-- Подкатегории -->
+        {% for subcat in category %}
+          <div class="category-card">
+              <a href="{{ subcat.get_absolute_url }}">
+              {% if subcat.picture %}
+                  <img src="{{ subcat.picture.url }}" class="subcategory-image">
+              {% endif %}
+              <div class="subcategory-title">{{ subcat.name }}</div>
+              </a>
+          </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

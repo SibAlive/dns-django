@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% if random_products %}
+<div class="catalog-container">
+    <h1 class="catalog-title">Наши товары</h1>
+
+    <div class="products-grid-home">
+          {% for product in random_products %}
+            <div class="products-card">
+                <a href="{{ url_for(
+                        'catalog.product',
+                        product_slug=product.slug) }}" class="no-underline">
+                  <div class="products-header">
+{#                      {% set main_img = product.images | selectattr('is_main') | first %}#}
+{#                          {% if main_img %}#}
+{#                            <img src="{{ url_for('catalog.static', filename='images/' ~ main_img.image_path) }}"#}
+{#                                 alt="{{ product.name }}"#}
+{#                                 class="products-main-img"#}
+{#                                 id="mainProductImg">#}
+{#                          {% else %}#}
+{#                            <img src="{{ url_for('catalog.static', filename='images/placeholder.jpg') }}"#}
+{#                                 alt="Изображение отсутствует"#}
+{#                                 class="products-main-img"#}
+{#                                 id="mainProductImg">#}
+{#                          {% endif %}#}
+                  </div>
+                  <div class="products-title">
+                    {{ product.name }}
+                  </div>
+                </a>
+                  <div class="products-purchase-row">
+{#                    <span class="products-price">{{ '{:,.0f}'.format(product.price).replace(',', ' ') }} ₽</span>#}
+{#                      {% set is_favorite = product.id in favorite_ids %}#}
+{#                            <button class="fav-btn favorite-toggle-btn {% if is_favorite %} is-fav {% endif %}"#}
+{#                                    data-product-id="{{ product.id }}">#}
+{#                                &#10084;#}
+{#                            </button>#}
+                    <button class="products-cart"></button>
+                  </div>
+              <div class="products-stores">
+                  {% if product.stock_quantity %}
+                    В наличии
+                  {% else %}
+                    Нет в наличии
+                  {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+    </div>
+</div>
+{% endif %}

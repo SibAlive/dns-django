@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-contact">
+    <h1>Профиль пользователя</h1>
+
+    {% if user.photo %}
+        <p><img src="{{ user.photo.url }}" class="profile-img"></p>
+    {% else %}
+        <p><img src="{{ default_image }}" class="profile-img"></p>
+    {% endif %}
+
+    <div class="profile-info">
+        <p><strong>Логин:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        {% if user.first_name %}
+            <p><strong>Имя:</strong> {{ user.first_name }}</p>
+        {% endif %}
+        {% if user.last_name %}
+            <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
+        {% endif %}
+        {% if user.date_birth %}
+            <p><strong>Дата рождения:</strong> {{ user.date_birth|date:"d.m.Y" }}</p>
+        {% endif %}
+    </div>
+
+<div class="profile-actions">
+    <a href="{% url 'users:profile_edit' %}" class="btn-edit">Редактировать профиль</a>
+    <a href="{% url 'users:password_change' %}" class="forgot-password-link">Сменить пароль</a>
+</div>
+
+<form method="post" action="{% url 'users:logout' %}" >
+    {% csrf_token %}
+    <button type="submit" class="logout-btn"> Выйти</button>
+</form>
+
+{% endblock %}
+</div>

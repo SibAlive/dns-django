@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load price_filters %}
+
+{% block content %}
+
+<div class="cart-container">
+    <h1 class="cart-title">Ваша корзина</h1>
+    {% if not cart_manager.is_empty %}
+        <div class="cart-list">
+            {% for item in cart_manager.get_items %}
+              <div class="cart-card">
+                <div class="cart-img-box">
+                  <a href="{% url 'catalog:product' product_slug=item.product.slug %}">
+                    {% if item.product.main_image %}
+                        <img src="{{ item.product.main_image.url }}"
+                             alt="{{ item.product.name }}"
+                             class="wishlist-product-img"
+                             id="mainProductImg">
+                    {% else %}
+                        <img src="{{ default_image }}"
+                             alt="Изображение отсутствует"
+                             class="wishlist-product-img"
+                             id="mainProductImg">
+                    {% endif %}
+                  </a>
+                </div>
+
+                <div class="cart-info">
+                  <div class="cart-prod-name">
+                      <a href="{% url 'catalog:product' product_slug=item.product.slug %}">
+                          {{ item.product.name }}
+                      </a>
+                  </div>
+                  <div class="cart-prod-desc">{{ item.product.description | linebreaks }}</div>
+                  <div class="cart-price-row">
+                    {% with old_price=item.product.get_old_price %}
+                        {% if old_price %}
+                            <span class="cart-prod-price">{{ item.product.price | format_price }} ₽</span>
+                            <span class="price-old">{{ old_price | format_price }} ₽</span>
+                        {% else %}
+                            <span class="cart-prod-price">{{ item.product.price | format_price }} ₽</span>
+                        {% endif %}
+                    {% endwith %}
+                    <span class="cart-prod-qty">× {{ item.quantity }} шт.</span>
+                  </div>
+
+                  <div class="cart-actions-row">
+                    <form method="post" action="{% url 'cart:add' product_id=item.product.pk %}">
+                      {% csrf_token %}
+                      <button type="submit" class="buy-btn">Добавить</button>
+                    </form>
+
+                    <form method="post" action="{% url 'cart:remove' product_id=item.product.pk %}">
+                      {% csrf_token %}
+                      <button type="submit" class="cart-remove-btn">Удалить</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+        </div>
+
+        <div class="cart-summary">
+            <div class="cart-summary-row">
+                <span>Товаров: {{ cart_manager.get_total_quantity }}, на сумму:</span>
+                <strong>{{ cart_manager.get_total_price | format_price }} ₽</strong>
+            </div>
+        </div>
+
+        <div class="cart-bottom-actions">
+            <a href="{% url 'catalog:categories' %}" class="cart-bottom-btn">Продолжить покупки</a>
+            <a href="#" class="cart-order-btn">Оформить заказ</a>
+            <a href="{% url 'cart:clear' %}" class="cart-order-btn">Очистить корзину</a>
+        </div>
+
+    {% else %}
+        <div class="cart-empty">Ваша корзина пуста</div>
+
+        <div class="cart-bottom-actions">
+            <a href="{% url 'catalog:categories' %}" class="cart-bottom-btn">Перейти в каталог</a>
+        </div>
+
+    {% endif %}
+</div>
+{% endblock %}

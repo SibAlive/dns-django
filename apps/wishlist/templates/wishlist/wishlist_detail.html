@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load price_filters %}
+{% load static %}
+
+{% block content %}
+
+{% if wishlist.products.all %}
+    <div class="order-summary-dns">
+        <div class="order-count">
+            Товаров: {{ wishlist.get_items_count }},
+            на сумму <span class="order-total">{{ wishlist.get_total_price|format_price }} ₽</span>
+        </div>
+    </div>
+
+    <div class="cart-list-dns">
+        {% for product in wishlist.products.all %}
+            <div class="cart-card-dns">
+                <div class="cart-imgbox-dns">
+                    <a href="{% url 'catalog:product' product.slug %}">
+                        {% if product.main_image %}
+                            <img src="{{ product.main_image.url }}"
+                                 alt="{{ product.name }}"
+                                 class="wishlist-product-img"
+                                 id="mainProductImg">
+                        {% else %}
+                            <img src="{{ default_image }}"
+                                 alt="Изображение отсутствует"
+                                 class="wishlist-product-img"
+                                 id="mainProductImg">
+                        {% endif %}
+                    </a>
+                </div>
+
+                <div class="cart-info-dns">
+                    <div class="cart-name-dns">
+                        <a href="{% url 'catalog:product' product.slug %}">
+                            {{ product.name }}
+                        </a>
+                    </div>
+
+                    <div class="cart-props-dns">
+                      {{ product.description|linebreaks }}
+                    </div>
+
+                    <div class="cart-meta-dns">
+                      <span class="cart-meta-status">В наличии</span>
+                    </div>
+                </div>
+
+                <div class="cart-side-dns">
+                    <div class="cart-price-row-dns">
+                        {% with old_price=product.get_old_price %}
+                            {% if old_price %}
+                                <span class="price-current">{{ product.price | format_price }} ₽</span>
+                                <span class="price-old">{{ old_price | format_price }} ₽</span>
+                            {% else %}
+                                <span class="price-current">{{ product.price | format_price }} ₽</span>
+                            {% endif %}
+                        {% endwith %}
+
+                        <button class="fav-btn favorite-toggle-btn {% if product.id in wishlist_products %} is-fav {% endif %}"
+                            data-product-id="{{ product.id }}"
+                            data-url="{% url 'wishlist:add' product.id %}">
+                            &#10084;
+                        </button>
+                    </div>
+
+                      <div class="cart-fav-buy-dns">
+                        <form method="post" action="{% url 'cart:add' product_id=product.id %}">
+                            {% csrf_token %}
+                          <button class="cart-buy-btn-dns">Купить</button>
+                        </form>
+                      </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="order-summary-dns">
+        <div class="order-count">В избранном пока нет товаров</div>
+    </div>
+{% endif %}
+
+<div class="cart-bottom-actions">
+    <a href="{% url 'catalog:categories' %}" class="cart-bottom-btn">Перейти в каталог</a>
+    <a href="{% url 'cart:detail' %}" class="cart-bottom-btn cart-btn-accent">Перейти в корзину</a>
+</div>
+
+<!-- CSRF токен для AJAX запросов (если используется) -->
+{% csrf_token %}
+
+<script src="{% static 'catalog/js/wishlist.js' %}"></script>
+
+{% endblock %}

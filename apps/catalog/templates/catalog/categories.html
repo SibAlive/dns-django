@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="catalog-container">
+    {% include "catalog/includes/breadcrumbs.html" %}
+
+    <h1 class="catalog-title">{{ title }}</h1>
+
+    <div class="categories-grid">
+      <!-- Категории -->
+        {% for category in categories %}
+          <div class="category-card">
+              {% if category.picture %}
+                <img src="{{ category.picture.url }}" class="category-image">
+              {% endif %}
+
+              <div class="category-title">{{ category.name }}</div>
+                <ul class="subcategory-list">
+                  <li class="category-item"><a href="{{ category.get_absolute_url }}"
+                                               class="subcategory-link">{{ category.name }}</a></li>
+                  {% for subcat in category.subcat.all %}
+                    <li class="subcategory-item"><a href="{{ subcat.get_absolute_url }}"
+                                                class="subcategory-link">{{ subcat.name }}</a></li>
+                  {% endfor %}
+                </ul>
+          </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

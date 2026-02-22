@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post" class="form-contact">
+    <h1>Авторизация</h1>
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}" />
+    <div class="form-error">{{ form.non_field_errors }}</div>
+    {% for f in form %}
+        <div class="form-group">
+            <label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}
+        </div>
+        <div class="form-error">{{ f.errors }}</div>
+    {% endfor %}
+
+    <p><button type="submit">Войти</button></p>
+    <p><a href="{% url 'users:register' %}" class="forgot-password-link">Регистрация</a></p>
+    <p><a href="{% url 'users:password_reset' %}" class="forgot-password-link">Забыли пароль?</a></p>
+</form>
+{% endblock %}
