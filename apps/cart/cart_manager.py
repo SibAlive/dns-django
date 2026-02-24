@@ -51,7 +51,8 @@ class CartManager:
         except Cart.DoesNotExist:
             pass
 
-    def _add_item(self, cart, product, quantity=1):
+    @staticmethod
+    def _add_item(cart, product, quantity=1):
         """Добавляет товар в корзину (внутренний метод)"""
         cart_item, created = CartItem.objects.get_or_create(
             cart=cart,
@@ -68,7 +69,8 @@ class CartManager:
 
         return cart_item
 
-    def _remove_item(self, cart, product, quantity=1):
+    @staticmethod
+    def _remove_item(cart, product, quantity=1):
         """Удаляет товар из корзины (внутренний метод)"""
         cart_item = CartItem.objects.get(cart=cart, product=product)
 

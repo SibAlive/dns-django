@@ -64,10 +64,12 @@ def cart_remove(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
 
     cart_manager.remove(product)
+    message = f'Товар "{product.name}" удален из корзины'
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({
             'success': True,
+            'message': message,
             'cart': {
                 'total_price': str(cart_manager.get_total_price()),
                 'total_quantity': cart_manager.get_total_quantity(),
@@ -75,7 +77,7 @@ def cart_remove(request, product_id):
             }
         })
 
-    messages.success(request, 'Товар удален из корзины')
+    messages.success(request, message)
     return redirect('cart:detail')
 
 
